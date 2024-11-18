@@ -24,7 +24,7 @@ const LoginScreen = ({ navigation }) => {
       return;
     }
 
-    if (phoneNumber === '1234567890' && password === 'password') {
+    if (phoneNumber === '1' && password === 'p') {
       navigation.replace('Home'); // Navigate to Home Screen on successful login
     } else {
       Alert.alert('Error', 'Invalid phone number or password.');
@@ -33,7 +33,7 @@ const LoginScreen = ({ navigation }) => {
 
   // Function to handle phone number input
   const handlePhoneNumberChange = (text) => {
-    if (text.length <= 10) {
+    if (text.length <= 1) {
       setPhoneNumber(text);
     }
     // Automatically dismiss the keyboard and shift focus to the password field

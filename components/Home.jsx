@@ -35,6 +35,34 @@ const HomeScreen = () => {
     },
   ];
 
+  // Product data
+  const products = [
+    {
+      id: '1',
+      name: 'Wheat',
+      price: '$200/Quintal',
+      image: require('../Asset/add-to-cart.png'), // Replace with actual asset
+    },
+    {
+      id: '2',
+      name: 'Rice',
+      price: '$250/Quintal',
+      image: require('../Asset/add-to-cart.png'), // Replace with actual asset
+    },
+    {
+      id: '3',
+      name: 'Maize',
+      price: '$180/Quintal',
+      image: require('../Asset/add-to-cart.png'), // Replace with actual asset
+    },
+    {
+      id: '4',
+      name: 'Barley',
+      price: '$220/Quintal',
+      image: require('../Asset/add-to-cart.png'), // Replace with actual asset
+    },
+  ];
+
   const renderBanner = ({ item }) => (
     <View style={styles.consultationBanner}>
       <View style={styles.bannerTextContainer}>
@@ -46,6 +74,14 @@ const HomeScreen = () => {
       <View style={styles.bannerImageContainer}>
         <Image source={item.image} style={styles.bannerImage} />
       </View>
+    </View>
+  );
+
+  const renderProduct = ({ item }) => (
+    <View style={styles.productCardHorizontal}>
+      <Image source={item.image} style={styles.productImageHorizontal} />
+      <Text style={styles.productNameHorizontal}>{item.name}</Text>
+      <Text style={styles.productPriceHorizontal}>{item.price}</Text>
     </View>
   );
 
@@ -78,6 +114,19 @@ const HomeScreen = () => {
           />
         </View>
 
+        {/* Horizontal Product Section */}
+        <View style={styles.productSectionHorizontal}>
+          <Text style={styles.sectionTitle}>Available Crops</Text>
+          <FlatList
+            data={products}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            renderItem={renderProduct}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.productListHorizontal}
+          />
+        </View>
+
         {/* Bottom Navigation */}
         <View style={styles.bottomNav}>
           <TouchableOpacity
@@ -86,16 +135,10 @@ const HomeScreen = () => {
           >
             <Image
               source={require('../Asset/building.png')}
-              style={[
-                styles.navIcon,
-                activeTab === 'Home' && styles.activeNavIcon,
-              ]}
+              style={[styles.navIcon, activeTab === 'Home' && styles.activeNavIcon]}
             />
             <Text
-              style={[
-                styles.navText,
-                activeTab === 'Home' && styles.activeNavText,
-              ]}
+              style={[styles.navText, activeTab === 'Home' && styles.activeNavText]}
             >
               Home
             </Text>
@@ -107,16 +150,10 @@ const HomeScreen = () => {
           >
             <Image
               source={require('../Asset/responsible.png')}
-              style={[
-                styles.navIcon,
-                activeTab === 'Services' && styles.activeNavIcon,
-              ]}
+              style={[styles.navIcon, activeTab === 'Services' && styles.activeNavIcon]}
             />
             <Text
-              style={[
-                styles.navText,
-                activeTab === 'Services' && styles.activeNavText,
-              ]}
+              style={[styles.navText, activeTab === 'Services' && styles.activeNavText]}
             >
               Services
             </Text>
@@ -128,16 +165,10 @@ const HomeScreen = () => {
           >
             <Image
               source={require('../Asset/add-to-cart.png')}
-              style={[
-                styles.navIcon,
-                activeTab === 'Cart' && styles.activeNavIcon,
-              ]}
+              style={[styles.navIcon, activeTab === 'Cart' && styles.activeNavIcon]}
             />
             <Text
-              style={[
-                styles.navText,
-                activeTab === 'Cart' && styles.activeNavText,
-              ]}
+              style={[styles.navText, activeTab === 'Cart' && styles.activeNavText]}
             >
               Cart
             </Text>
@@ -149,16 +180,10 @@ const HomeScreen = () => {
           >
             <Image
               source={require('../Asset/profile.png')}
-              style={[
-                styles.navIcon,
-                activeTab === 'Profile' && styles.activeNavIcon,
-              ]}
+              style={[styles.navIcon, activeTab === 'Profile' && styles.activeNavIcon]}
             />
             <Text
-              style={[
-                styles.navText,
-                activeTab === 'Profile' && styles.activeNavText,
-              ]}
+              style={[styles.navText, activeTab === 'Profile' && styles.activeNavText]}
             >
               Profile
             </Text>
@@ -208,7 +233,7 @@ const styles = StyleSheet.create({
     height: 20,
   },
   bannerWrapper: {
-    height: 120, // Set height for the banner section
+    height: 140,
     marginHorizontal: 15,
     marginVertical: 10,
   },
@@ -216,26 +241,26 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    marginRight: 15,
+    borderRadius: 15,
+    marginRight: 10,
     padding: 15,
-    width: 250, // Set width for each banner
-    elevation: 8,
+    width: 260,
+    elevation: 6,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
   },
   bannerTextContainer: {
-    flex: 2.5,
+    flex: 3,
     justifyContent: 'center',
     paddingRight: 10,
   },
   bannerTitle: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 5,
+    marginBottom: 8,
   },
   callNowButton: {
     backgroundColor: '#6FBF73',
@@ -253,13 +278,54 @@ const styles = StyleSheet.create({
     flex: 2,
     alignItems: 'center',
     justifyContent: 'center',
-    overflow: 'hidden',
   },
   bannerImage: {
     width: 80,
     height: 80,
     resizeMode: 'contain',
-    transform: [{ rotate: '-5deg' }],
+  },
+  productSectionHorizontal: {
+    height: 180, // Set height for the product section
+    marginHorizontal: 15,
+    marginVertical: 10,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#333',
+  },
+  productListHorizontal: {
+    flexDirection: 'row',
+  },
+  productCardHorizontal: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    marginRight: 10,
+    padding: 10,
+    width: 150,
+    alignItems: 'center',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  productImageHorizontal: {
+    width: 60,
+    height: 60,
+    marginBottom: 10,
+    resizeMode: 'contain',
+  },
+  productNameHorizontal: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: '#333',
+  },
+  productPriceHorizontal: {
+    fontSize: 12,
+    color: '#666',
   },
   bottomNav: {
     position: 'absolute',

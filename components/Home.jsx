@@ -10,7 +10,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const [activeTab, setActiveTab] = useState('Home'); // State to track active tab
 
   // Banner data
@@ -41,25 +41,25 @@ const HomeScreen = () => {
       id: '1',
       name: 'Wheat',
       price: '$200/Quintal',
-      image: require('../Asset/add-to-cart.png'), // Replace with actual asset
+      image: require('../Asset/add-to-cart.png'),
     },
     {
       id: '2',
       name: 'Rice',
       price: '$250/Quintal',
-      image: require('../Asset/add-to-cart.png'), // Replace with actual asset
+      image: require('../Asset/add-to-cart.png'),
     },
     {
       id: '3',
       name: 'Maize',
       price: '$180/Quintal',
-      image: require('../Asset/add-to-cart.png'), // Replace with actual asset
+      image: require('../Asset/add-to-cart.png'),
     },
     {
       id: '4',
       name: 'Barley',
       price: '$220/Quintal',
-      image: require('../Asset/add-to-cart.png'), // Replace with actual asset
+      image: require('../Asset/add-to-cart.png'),
     },
   ];
 
@@ -131,7 +131,10 @@ const HomeScreen = () => {
         <View style={styles.bottomNav}>
           <TouchableOpacity
             style={styles.navItem}
-            onPress={() => setActiveTab('Home')}
+            onPress={() => {
+              setActiveTab('Home');
+              navigation.navigate('Home');
+            }}
           >
             <Image
               source={require('../Asset/building.png')}
@@ -146,7 +149,10 @@ const HomeScreen = () => {
 
           <TouchableOpacity
             style={styles.navItem}
-            onPress={() => setActiveTab('Services')}
+            onPress={() => {
+              setActiveTab('Services');
+              navigation.navigate('Service'); // Navigate to Services screen
+            }}
           >
             <Image
               source={require('../Asset/responsible.png')}
@@ -161,7 +167,10 @@ const HomeScreen = () => {
 
           <TouchableOpacity
             style={styles.navItem}
-            onPress={() => setActiveTab('Cart')}
+            onPress={() => {
+              setActiveTab('Cart');
+              navigation.navigate('Cart'); // Navigate to Cart screen
+            }}
           >
             <Image
               source={require('../Asset/add-to-cart.png')}
@@ -176,7 +185,10 @@ const HomeScreen = () => {
 
           <TouchableOpacity
             style={styles.navItem}
-            onPress={() => setActiveTab('Profile')}
+            onPress={() => {
+              setActiveTab('Profile');
+              navigation.navigate('Profile'); // Navigate to Profile screen
+            }}
           >
             <Image
               source={require('../Asset/profile.png')}
@@ -285,7 +297,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   productSectionHorizontal: {
-    height: 180, // Set height for the product section
+    height: 180,
     marginHorizontal: 15,
     marginVertical: 10,
   },

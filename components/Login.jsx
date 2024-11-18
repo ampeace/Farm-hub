@@ -6,95 +6,110 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  Alert,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [password, setPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  return (
-    <View style={styles.container}>
-      {/* Illustration */}
-      <Image
-        source={require('../Asset/tea.png')} // Replace with your image path
-        style={styles.illustration}
-        resizeMode="contain"
-      />
+  // Function to handle login
+  const handleLogin = () => {
+    Keyboard.dismiss(); // Dismiss the keyboard
+    if (!phoneNumber || !password) {
+      Alert.alert('Error', 'Please fill in both fields.');
+      return;
+    }
 
-      {/* Input Fields */}
-      <View style={styles.inputContainer}>
-        <View style={styles.inputWrapper}>
-          <Image
-            source={require('../Asset/telephone.png')} // Replace with your phone icon
-            style={styles.icon}
-          />
-          <TextInput
-            placeholder="Phone number"
-            style={styles.input}
-            keyboardType="phone-pad"
-          />
+    if (phoneNumber === '1234567890' && password === 'password') {
+      navigation.replace('Home'); // Navigate to Home Screen on successful login
+    } else {
+      Alert.alert('Error', 'Invalid phone number or password.');
+    }
+  };
+
+  // Function to handle phone number input
+  const handlePhoneNumberChange = (text) => {
+    if (text.length <= 10) {
+      setPhoneNumber(text);
+    }
+    // Automatically dismiss the keyboard and shift focus to the password field
+    if (text.length === 10) {
+      Keyboard.dismiss(); // Dismiss the keyboard
+    }
+  };
+
+  return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        {/* Illustration */}
+        <Image
+          source={require('../Asset/tea.png')} // Replace with your illustration
+          style={styles.illustration}
+          resizeMode="contain"
+        />
+
+        {/* Input Fields */}
+        <View style={styles.inputContainer}>
+          <View style={styles.inputWrapper}>
+            <Image source={require('../Asset/telephone.png')} style={styles.icon} />
+            <TextInput
+              placeholder="Phone number"
+              style={styles.input}
+              keyboardType="phone-pad"
+              value={phoneNumber}
+              onChangeText={handlePhoneNumberChange}
+              maxLength={10} // Limit input to 10 digits
+              returnKeyType="done"
+            />
+          </View>
+
+          <View style={styles.inputWrapper}>
+            <Image source={require('../Asset/password.png')} style={styles.icon} />
+            <TextInput
+              placeholder="Password"
+              style={styles.input}
+              secureTextEntry={!passwordVisible}
+              value={password}
+              onChangeText={setPassword}
+              returnKeyType="done"
+              onSubmitEditing={handleLogin} // Handle login on "Done" press
+            />
+            <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
+              <Image
+                source={
+                  passwordVisible
+                    ? require('../Asset/eye.png') // Replace with open eye icon
+                    : require('../Asset/eye closed.png') // Replace with closed eye icon
+                }
+                style={styles.icon}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
 
-        <View style={styles.inputWrapper}>
-          <Image
-            source={require('../Asset/password.png')} // Replace with your lock icon
-            style={styles.icon}
-          />
-          <TextInput
-            placeholder="Password"
-            style={styles.input}
-            secureTextEntry={!passwordVisible}
-          />
-          <TouchableOpacity
-            onPress={() => setPasswordVisible(!passwordVisible)}
-          >
-            <Image
-              source={
-                passwordVisible
-                  ? require('../Asset/eye.png') // Eye open icon
-                  : require('../Asset/eye closed.png') // Eye closed icon
-              }
-              style={styles.icon}
-            />
+        {/* Forgot Password */}
+        <TouchableOpacity style={styles.forgotPassword} onPress={() => navigation.navigate('ForgotPassword')}>
+          <Text style={styles.forgotPasswordText}>Forgot password?</Text>
+        </TouchableOpacity>
+
+        {/* Login Button */}
+        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+          <Text style={styles.loginButtonText}>Login</Text>
+        </TouchableOpacity>
+
+        {/* Sign Up Navigation */}
+        <View style={styles.signupContainer}>
+          <Text style={styles.signupText}>Don’t have an account?</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+            <Text style={styles.signupLink}> Sign up</Text>
           </TouchableOpacity>
         </View>
       </View>
-
-      {/* Forgot Password */}
-      <TouchableOpacity style={styles.forgotPassword}>
-        <Text style={styles.forgotPasswordText}>Forgot password?</Text>
-      </TouchableOpacity>
-
-      {/* Login Button */}
-      <TouchableOpacity style={styles.loginButton}>
-        <Text style={styles.loginButtonText}>Login</Text>
-      </TouchableOpacity>
-
-      {/* Social Media Buttons */}
-      <Text style={styles.connectText}>or</Text>
-      <Text style={styles.connectText}>Connect using</Text>
-      <View style={styles.socialButtons}>
-        <TouchableOpacity>
-          <Image
-            source={require('../Asset/google.png')} // Google icon
-            style={styles.socialIcon}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Image
-            source={require('../Asset/facebook.png')} // Facebook icon
-            style={styles.socialIcon}
-          />
-        </TouchableOpacity>
-      </View>
-
-      {/* Sign Up */}
-      <View style={styles.signupContainer}>
-        <Text style={styles.signupText}>Don’t have an account?</Text>
-        <TouchableOpacity>
-          <Text style={styles.signupLink}> Sign up</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -155,21 +170,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
-  },
-  connectText: {
-    color: '#6C757D',
-    fontSize: 14,
-    marginBottom: 10,
-  },
-  socialButtons: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginBottom: 30,
-  },
-  socialIcon: {
-    width: 40,
-    height: 40,
-    marginHorizontal: 10,
   },
   signupContainer: {
     flexDirection: 'row',

@@ -9,7 +9,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 
-const SignUpScreen = () => {
+const SignUpScreen = ({ navigation }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   return (
@@ -24,19 +24,14 @@ const SignUpScreen = () => {
 
         {/* Input Fields */}
         <View style={styles.inputContainer}>
-          {/* Name Field */}
           <View style={styles.inputWrapper}>
             <Image
               source={require('../Asset/user.png')} // User icon PNG
               style={styles.icon}
             />
-            <TextInput
-              placeholder="Full Name"
-              style={styles.input}
-            />
+            <TextInput placeholder="Full Name" style={styles.input} />
           </View>
 
-          {/* Email Field */}
           <View style={styles.inputWrapper}>
             <Image
               source={require('../Asset/mail-icon.png')} // Email icon PNG
@@ -49,7 +44,6 @@ const SignUpScreen = () => {
             />
           </View>
 
-          {/* Phone Number Field */}
           <View style={styles.inputWrapper}>
             <Image
               source={require('../Asset/telephone.png')} // Phone icon PNG
@@ -63,7 +57,6 @@ const SignUpScreen = () => {
             />
           </View>
 
-          {/* Password Field */}
           <View style={styles.inputWrapper}>
             <Image
               source={require('../Asset/lock.png')} // Lock icon PNG
@@ -74,9 +67,7 @@ const SignUpScreen = () => {
               style={styles.input}
               secureTextEntry={!passwordVisible}
             />
-            <TouchableOpacity
-              onPress={() => setPasswordVisible(!passwordVisible)}
-            >
+            <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
               <Image
                 source={
                   passwordVisible
@@ -94,28 +85,10 @@ const SignUpScreen = () => {
           <Text style={styles.signupButtonText}>Sign Up</Text>
         </TouchableOpacity>
 
-        {/* Social Media Sign-Up */}
-        <Text style={styles.connectText}>or</Text>
-        <Text style={styles.connectText}>Sign up using</Text>
-        <View style={styles.socialButtons}>
-          <TouchableOpacity>
-            <Image
-              source={require('../Asset/google.png')} // Google icon PNG
-              style={styles.socialIcon}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              source={require('../Asset/facebook.png')} // Facebook icon PNG
-              style={styles.socialIcon}
-            />
-          </TouchableOpacity>
-        </View>
-
         {/* Login Navigation */}
         <View style={styles.loginContainer}>
           <Text style={styles.loginText}>Already have an account?</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
             <Text style={styles.loginLink}> Login</Text>
           </TouchableOpacity>
         </View>

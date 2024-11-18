@@ -5,7 +5,7 @@ const SplashScreen = ({ navigation }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       navigation.replace('SignUp'); // Navigate to the Sign Up screen after 10 seconds
-    }, 500); // 10 seconds
+    }, 500); //  seconds
 
     return () => clearTimeout(timer); // Cleanup the timer
   }, [navigation]);
@@ -19,7 +19,7 @@ const SplashScreen = ({ navigation }) => {
       {/* "Made in India" Section */}
       <View style={styles.footer}>
         <Image
-          source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/India_Emblem.png/480px-India_Emblem.png' }}
+         source={require('../Asset/made-in-india.png')}
           style={styles.footerImage}
         />
         <Text style={styles.footerText}>मेड इन इंडिया</Text>

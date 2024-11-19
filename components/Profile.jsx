@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // For icons
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   const dashboardItems = [
     {
       id: '1',
@@ -18,12 +18,14 @@ const ProfileScreen = () => {
       icon: 'wallet-outline', // Ionicons icon
       notification: '2 New',
       notificationStyle: styles.notificationBlue,
+      onPress: () => navigation.navigate('Payments'), // Navigate to Payments
     },
     {
       id: '2',
       label: 'Achievements',
       icon: 'trophy-outline',
       notification: null,
+      onPress: () => alert('Achievements clicked!'),
     },
     {
       id: '3',
@@ -31,11 +33,12 @@ const ProfileScreen = () => {
       icon: 'lock-closed-outline',
       notification: 'Actions Needed',
       notificationStyle: styles.notificationRed,
+      onPress: () => alert('Privacy clicked!'),
     },
   ];
 
   const renderDashboardItem = ({ item }) => (
-    <TouchableOpacity style={styles.dashboardItem}>
+    <TouchableOpacity style={styles.dashboardItem} onPress={item.onPress}>
       <View style={styles.dashboardIconContainer}>
         <Ionicons name={item.icon} size={24} color="#6FBF73" />
       </View>
@@ -75,7 +78,7 @@ const ProfileScreen = () => {
         {/* Profile Section */}
         <View style={styles.profileSection}>
           <Image
-             source={require('../Asset/tea.png')} // Placeholder for avatar
+            source={require('../Asset/tea.png')} // Placeholder for avatar
             style={styles.avatar}
           />
           <View style={styles.profileDetails}>
@@ -123,7 +126,6 @@ const ProfileScreen = () => {
 };
 
 export default ProfileScreen;
-
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,

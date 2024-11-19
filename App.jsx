@@ -8,8 +8,9 @@ import SignUpScreen from './components/Signup'; // Sign Up Screen
 import ForgotPasswordScreen from './components/Forget'; // Forgot Password Screen
 import HomeScreen from './components/Home'; // Home Screen
 import ProfileScreen from './components/Profile'; // Profile Screen
-import CartScreen from './components/Cart';
+import CartScreen from './components/Cart'; // Cart Screen
 import ServiceScreen from './components/Service'; // Service Screen
+import PaymentsScreen from './components/Payment'; // Payments Screen (NEW)
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,14 @@ const App = () => {
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="Cart" component={CartScreen} />
         <Stack.Screen name="Service" component={ServiceScreen} />
+        <Stack.Screen
+          name="Payments" // NEW Payment Screen
+          component={PaymentsScreen}
+          options={{
+            headerShown: true, // Show the header for Payments Screen
+            title: 'Payments', // Title for the Payments screen header
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

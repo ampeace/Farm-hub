@@ -15,17 +15,17 @@ const ProfileScreen = ({ navigation }) => {
     {
       id: '1',
       label: 'Payments',
-      icon: 'wallet-outline', // Ionicons icon
+      icon: 'wallet-outline',
       notification: '2 New',
       notificationStyle: styles.notificationBlue,
-      onPress: () => navigation.navigate('Payments'), // Navigate to Payments Screen
+      onPress: () => navigation.navigate('Payments'),
     },
     {
       id: '2',
       label: 'Achievements',
       icon: 'trophy-outline',
       notification: null,
-      onPress: () => navigation.navigate('Achievements'), // Navigate to Achievements Screen
+      onPress: () => navigation.navigate('Achievements'),
     },
     {
       id: '3',
@@ -33,9 +33,21 @@ const ProfileScreen = ({ navigation }) => {
       icon: 'lock-closed-outline',
       notification: 'Actions Needed',
       notificationStyle: styles.notificationRed,
-      onPress: () => navigation.navigate('Privacy'), // Navigate to Privacy Screen
+      onPress: () => navigation.navigate('Privacy'),
+    },
+    {
+      id: '4',
+      label: 'Log Out',
+      icon: 'exit-outline',
+      notification: null,
+      onPress: () => handleLogout(),
     },
   ];
+
+  const handleLogout = () => {
+    alert('Logged Out!');
+    navigation.replace('Splash');
+  };
 
   const renderDashboardItem = ({ item }) => (
     <TouchableOpacity style={styles.dashboardItem} onPress={item.onPress}>
@@ -62,7 +74,7 @@ const ProfileScreen = ({ navigation }) => {
       <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
             <Ionicons name="arrow-back-outline" size={24} color="#333" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>My Profile</Text>
@@ -78,7 +90,7 @@ const ProfileScreen = ({ navigation }) => {
         {/* Profile Section */}
         <View style={styles.profileSection}>
           <Image
-            source={require('../Asset/tea.png')} // Placeholder for avatar
+            source={require('../Asset/tea.png')}
             style={styles.avatar}
           />
           <View style={styles.profileDetails}>
@@ -86,9 +98,8 @@ const ProfileScreen = ({ navigation }) => {
             <Text style={styles.profileRole}>Senior Agriculture</Text>
           </View>
           <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
-           <Ionicons name="pencil-outline" size={20} color="#6FBF73" />
+            <Ionicons name="pencil-outline" size={20} color="#6FBF73" />
           </TouchableOpacity>
-
         </View>
 
         {/* Status Section */}
@@ -111,16 +122,6 @@ const ProfileScreen = ({ navigation }) => {
           renderItem={renderDashboardItem}
           style={styles.dashboardList}
         />
-
-        {/* Account Section */}
-        <View style={styles.accountSection}>
-          <TouchableOpacity>
-            <Text style={styles.switchAccountText}>Switch to Other Account</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text style={styles.logoutText}>Log Out</Text>
-          </TouchableOpacity>
-        </View>
       </View>
     </SafeAreaView>
   );
@@ -131,7 +132,7 @@ export default ProfileScreen;
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#F5F5F5', // Match background color
+    backgroundColor: '#F5F5F5',
   },
   container: {
     flex: 1,
@@ -237,17 +238,5 @@ const styles = StyleSheet.create({
   },
   chevron: {
     marginLeft: 10,
-  },
-  accountSection: {
-    marginTop: 20,
-  },
-  switchAccountText: {
-    fontSize: 16,
-    color: '#007BFF',
-    marginBottom: 10,
-  },
-  logoutText: {
-    fontSize: 16,
-    color: '#FF3B3B',
   },
 });

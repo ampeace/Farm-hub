@@ -8,12 +8,14 @@ import {
   FlatList,
   StyleSheet,
   SafeAreaView,
+  ScrollView,
 } from 'react-native';
 
 const HomeScreen = ({ navigation }) => {
-  const [activeTab, setActiveTab] = useState('Home'); // State to track active tab
+  const [activeTab, setActiveTab] = useState('Home');
+  const [listedProducts, setListedProducts] = useState([]);
+  const [newProduct, setNewProduct] = useState({ name: '', price: '' });
 
-  // Banner data
   const banners = [
     {
       id: '1',
@@ -35,7 +37,6 @@ const HomeScreen = ({ navigation }) => {
     },
   ];
 
-  // Product data
   const products = [
     {
       id: '1',
@@ -85,50 +86,106 @@ const HomeScreen = ({ navigation }) => {
     </View>
   );
 
+  const addProduct = () => {
+    if (newProduct.name && newProduct.price) {
+      setListedProducts((prev) => [
+        ...prev,
+        {
+          id: (prev.length + 1).toString(),
+          name: newProduct.name,
+          price: newProduct.price,
+          image: require('../Asset/add-to-cart.png'),
+        },
+      ]);
+      setNewProduct({ name: '', price: '' });
+    } else {
+      alert('Please fill out both fields to add a product.');
+    }
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        {/* Search Section */}
-        <View style={styles.searchSection}>
-          <TextInput
-            placeholder="Search here..."
-            style={styles.searchInput}
-            placeholderTextColor="#A9A9A9"
-          />
-          <TouchableOpacity style={styles.filterButton}>
-            <Image
-              source={require('../Asset/google.png')} // Replace with filter icon
-              style={styles.filterIcon}
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        <View style={styles.container}>
+          {/* Search Section */}
+          <View style={styles.searchSection}>
+            <TextInput
+              placeholder="Search here..."
+              style={styles.searchInput}
+              placeholderTextColor="#A9A9A9"
             />
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity style={styles.filterButton}>
+              <Image
+                source={require('../Asset/google.png')}
+                style={styles.filterIcon}
+              />
+            </TouchableOpacity>
+          </View>
 
-        {/* Horizontal Banner Section */}
-        <View style={styles.bannerWrapper}>
-          <FlatList
-            data={banners}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            renderItem={renderBanner}
-            keyExtractor={(item) => item.id}
-          />
-        </View>
+          {/* Horizontal Banner Section */}
+          <View style={styles.bannerWrapper}>
+            <FlatList
+              data={banners}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              renderItem={renderBanner}
+              keyExtractor={(item) => item.id}
+            />
+          </View>
 
-        {/* Horizontal Product Section */}
-        <View style={styles.productSectionHorizontal}>
-          <Text style={styles.sectionTitle}>Available Crops</Text>
-          <FlatList
-            data={products}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            renderItem={renderProduct}
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={styles.productListHorizontal}
-          />
-        </View>
+          {/* Horizontal Product Section */}
+          <View style={styles.productSectionHorizontal}>
+            <Text style={styles.sectionTitle}>Available Crops</Text>
+            <FlatList
+              data={products}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              renderItem={renderProduct}
+              keyExtractor={(item) => item.id}
+              contentContainerStyle={styles.productListHorizontal}
+            />
+          </View>
 
-        {/* Bottom Navigation */}
-        <View style={styles.bottomNav}>
+          {/* Your Listed Products Section */}
+          {listedProducts.length > 0 && (
+            <View style={styles.productSectionHorizontal}>
+              <Text style={styles.sectionTitle}>Your Listed Products</Text>
+              <FlatList
+                data={listedProducts}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                renderItem={renderProduct}
+                keyExtractor={(item) => item.id}
+                contentContainerStyle={styles.productListHorizontal}
+              />
+            </View>
+          )}
+
+          {/* List Your Product Section */}
+          <View style={styles.listProductSection}>
+            <Text style={styles.sectionTitle}>List Your Product</Text>
+            <View style={styles.productForm}>
+              <TextInput
+                placeholder="Product Name"
+                style={styles.input}
+                value={newProduct.name}
+                onChangeText={(text) => setNewProduct({ ...newProduct, name: text })}
+              />
+              <TextInput
+                placeholder="Price (e.g., $200/Quintal)"
+                style={styles.input}
+                value={newProduct.price}
+                onChangeText={(text) => setNewProduct({ ...newProduct, price: text })}
+              />
+              <TouchableOpacity style={styles.addButton} onPress={addProduct}>
+                <Text style={styles.addButtonText}>Add Product</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </ScrollView>
+      {/* Bottom Navigation */}
+      <View style={styles.bottomNav}>
           <TouchableOpacity
             style={styles.navItem}
             onPress={() => {
@@ -201,15 +258,32 @@ const HomeScreen = ({ navigation }) => {
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
     </SafeAreaView>
   );
 };
-
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#F5F5F5',
+  },
+  scrollView: {
+    paddingBottom: 80,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#F5F5F5',
+  },
+  bottomNav: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingVertical: 10,
+    backgroundColor: '#FFFFFF',
+    borderTopWidth: 1,
+    borderColor: '#E0E0E0',
   },
   container: {
     flex: 1,
@@ -341,7 +415,7 @@ const styles = StyleSheet.create({
   },
   bottomNav: {
     position: 'absolute',
-    bottom: 0,
+    bottom: 50,
     width: '90%',
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -373,6 +447,43 @@ const styles = StyleSheet.create({
   },
   activeNavText: {
     color: '#6FBF73',
+    fontWeight: 'bold',
+  },
+  listProductSection: {
+    paddingHorizontal: 15,
+    marginVertical: 20,
+  },
+  productForm: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    padding: 15,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  input: {
+    backgroundColor: '#F9F9F9',
+    borderRadius: 10,
+    borderColor: '#E0E0E0',
+    borderWidth: 1,
+    height: 50,
+    paddingHorizontal: 15,
+    marginBottom: 15,
+    fontSize: 16,
+    color: '#333',
+  },
+  addButton: {
+    backgroundColor: '#6FBF73',
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  addButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
     fontWeight: 'bold',
   },
 });

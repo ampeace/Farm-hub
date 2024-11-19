@@ -13,6 +13,7 @@ import ServiceScreen from './components/Service'; // Service Screen
 import PaymentsScreen from './components/Payment'; // Payments Screen
 import AchievementsScreen from './components/Achive'; // Achievements Screen (NEW)
 import PrivacyScreen from './components/Privacy'; // Privacy Screen (NEW)
+import EditProfileScreen from './components/Edit'; // Import the new screen
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,7 @@ const App = () => {
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="EditProfile" component={EditProfileScreen} />
         <Stack.Screen name="Cart" component={CartScreen} />
         <Stack.Screen name="Service" component={ServiceScreen} />
         <Stack.Screen

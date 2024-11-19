@@ -85,9 +85,10 @@ const ProfileScreen = ({ navigation }) => {
             <Text style={styles.profileName}>Karan Aujla</Text>
             <Text style={styles.profileRole}>Senior Agriculture</Text>
           </View>
-          <TouchableOpacity>
-            <Ionicons name="pencil-outline" size={20} color="#6FBF73" />
+          <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
+           <Ionicons name="pencil-outline" size={20} color="#6FBF73" />
           </TouchableOpacity>
+
         </View>
 
         {/* Status Section */}

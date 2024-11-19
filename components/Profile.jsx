@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
+  SafeAreaView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // For icons
 
@@ -54,70 +55,80 @@ const ProfileScreen = () => {
   );
 
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity>
-          <Ionicons name="arrow-back-outline" size={24} color="#333" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>My Profile</Text>
-        <TouchableOpacity>
-          <Ionicons name="ellipsis-horizontal-outline" size={24} color="#333" />
-        </TouchableOpacity>
-      </View>
-
-      {/* Profile Section */}
-      <View style={styles.profileSection}>
-        <Image
-          source={{ uri: 'https://via.placeholder.com/80' }} // Placeholder for avatar
-          style={styles.avatar}
-        />
-        <View style={styles.profileDetails}>
-          <Text style={styles.profileName}>Edward Larry</Text>
-          <Text style={styles.profileRole}>Senior Designer</Text>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <TouchableOpacity>
+            <Ionicons name="arrow-back-outline" size={24} color="#333" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>My Profile</Text>
+          <TouchableOpacity>
+            <Ionicons
+              name="ellipsis-horizontal-outline"
+              size={24}
+              color="#333"
+            />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity>
-          <Ionicons name="pencil-outline" size={20} color="#6FBF73" />
-        </TouchableOpacity>
-      </View>
 
-      {/* Status Section */}
-      <View style={styles.statusSection}>
-        <TouchableOpacity style={[styles.statusChip, styles.statusAway]}>
-          <Text style={styles.statusText}>😴 Away</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.statusChip, styles.statusWork]}>
-          <Text style={styles.statusText}>💼 At Work</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.statusChip, styles.statusGaming]}>
-          <Text style={styles.statusText}>🎮 Gaming</Text>
-        </TouchableOpacity>
-      </View>
+        {/* Profile Section */}
+        <View style={styles.profileSection}>
+          <Image
+             source={require('../Asset/tea.png')} // Placeholder for avatar
+            style={styles.avatar}
+          />
+          <View style={styles.profileDetails}>
+            <Text style={styles.profileName}>Edward Larry</Text>
+            <Text style={styles.profileRole}>Senior Designer</Text>
+          </View>
+          <TouchableOpacity>
+            <Ionicons name="pencil-outline" size={20} color="#6FBF73" />
+          </TouchableOpacity>
+        </View>
 
-      {/* Dashboard Section */}
-      <FlatList
-        data={dashboardItems}
-        keyExtractor={(item) => item.id}
-        renderItem={renderDashboardItem}
-        style={styles.dashboardList}
-      />
+        {/* Status Section */}
+        <View style={styles.statusSection}>
+          <TouchableOpacity style={[styles.statusChip, styles.statusAway]}>
+            <Text style={styles.statusText}>😴 Away</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.statusChip, styles.statusWork]}>
+            <Text style={styles.statusText}>💼 At Work</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.statusChip, styles.statusGaming]}>
+            <Text style={styles.statusText}>🎮 Gaming</Text>
+          </TouchableOpacity>
+        </View>
 
-      {/* Account Section */}
-      <View style={styles.accountSection}>
-        <TouchableOpacity>
-          <Text style={styles.switchAccountText}>Switch to Other Account</Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text style={styles.logoutText}>Log Out</Text>
-        </TouchableOpacity>
+        {/* Dashboard Section */}
+        <FlatList
+          data={dashboardItems}
+          keyExtractor={(item) => item.id}
+          renderItem={renderDashboardItem}
+          style={styles.dashboardList}
+        />
+
+        {/* Account Section */}
+        <View style={styles.accountSection}>
+          <TouchableOpacity>
+            <Text style={styles.switchAccountText}>Switch to Other Account</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Text style={styles.logoutText}>Log Out</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 export default ProfileScreen;
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#F5F5F5', // Match background color
+  },
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',

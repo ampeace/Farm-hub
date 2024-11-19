@@ -82,8 +82,8 @@ const ProfileScreen = ({ navigation }) => {
             style={styles.avatar}
           />
           <View style={styles.profileDetails}>
-            <Text style={styles.profileName}>Edward Larry</Text>
-            <Text style={styles.profileRole}>Senior Designer</Text>
+            <Text style={styles.profileName}>Karan Aujla</Text>
+            <Text style={styles.profileRole}>Senior Agriculture</Text>
           </View>
           <TouchableOpacity>
             <Ionicons name="pencil-outline" size={20} color="#6FBF73" />
@@ -96,7 +96,7 @@ const ProfileScreen = ({ navigation }) => {
             <Text style={styles.statusText}>😴 Away</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.statusChip, styles.statusWork]}>
-            <Text style={styles.statusText}>💼 At Work</Text>
+            <Text style={styles.statusText}>💼 At Farm</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.statusChip, styles.statusGaming]}>
             <Text style={styles.statusText}>🎮 Gaming</Text>

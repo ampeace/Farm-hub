@@ -8,17 +8,14 @@ import {
   Image,
   SafeAreaView,
   ScrollView,
+  FlatList,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 const PaymentScreen = ({ navigation }) => {
   const [selectedMethod, setSelectedMethod] = useState(null); // Payment method state
-  const [isChecked, setIsChecked] = useState({
-    mastercard: false,
-    visa: false,
-    paypal: false,
-    gpay: false,
-  }); // Checkbox state for each method
+  const [isChecked, setIsChecked] = useState(false); // Custom checkbox state
+  const [paymentBanners, setPaymentBanners] = useState([]); // Store multiple banners
 
   const paymentMethods = [
     { id: 'mastercard', label: 'MasterCard', image: require('../Asset/card.png') },
@@ -41,14 +38,91 @@ const PaymentScreen = ({ navigation }) => {
     setCardDetails((prev) => ({ ...prev, [field]: value }));
   };
 
+  const handleAddPayment = () => {
+    if (!selectedMethod) {
+      alert('Please select a payment method before adding.');
+      return;
+    }
+
+    const banner = {
+      id: new Date().toISOString(), // Unique ID for each banner
+      method: selectedMethod,
+      details: { ...cardDetails },
+    };
+
+    setPaymentBanners((prev) => [...prev, banner]);
+
+    // Reset form fields for next input
+    setCardDetails({
+      cardName: '',
+      cardNumber: '',
+      expDate: '',
+      ccv: '',
+      email: '',
+      phoneNumber: '',
+      upiId: '',
+    });
+
+    setSelectedMethod(null);
+    setIsChecked(false); // Reset checkbox
+  };
+
+  const renderBanner = ({ item }) => (
+    <View style={styles.banner}>
+      <Text style={styles.bannerTitle}>Payment Method: {item.method}</Text>
+      {item.method === 'mastercard' || item.method === 'visa' ? (
+        <>
+          <Text style={styles.bannerText}>
+            <Text style={styles.bannerLabel}>Name: </Text>
+            {item.details.cardName}
+          </Text>
+          <Text style={styles.bannerText}>
+            <Text style={styles.bannerLabel}>Card Number: </Text>
+            {item.details.cardNumber}
+          </Text>
+          <Text style={styles.bannerText}>
+            <Text style={styles.bannerLabel}>Expiry: </Text>
+            {item.details.expDate}
+          </Text>
+        </>
+      ) : item.method === 'paypal' ? (
+        <>
+          <Text style={styles.bannerText}>
+            <Text style={styles.bannerLabel}>Name: </Text>
+            {item.details.cardName}
+          </Text>
+          <Text style={styles.bannerText}>
+            <Text style={styles.bannerLabel}>Email: </Text>
+            {item.details.email}
+          </Text>
+        </>
+      ) : item.method === 'gpay' ? (
+        <>
+          <Text style={styles.bannerText}>
+            <Text style={styles.bannerLabel}>Name: </Text>
+            {item.details.cardName}
+          </Text>
+          <Text style={styles.bannerText}>
+            <Text style={styles.bannerLabel}>Phone: </Text>
+            {item.details.phoneNumber}
+          </Text>
+          <Text style={styles.bannerText}>
+            <Text style={styles.bannerLabel}>UPI ID: </Text>
+            {item.details.upiId}
+          </Text>
+        </>
+      ) : null}
+    </View>
+  );
+
   const renderForm = () => {
     const renderSaveDetailsCheckbox = () => (
       <View style={styles.checkboxContainer}>
         <TouchableOpacity
-          style={[styles.checkbox, isChecked[selectedMethod] && styles.checkboxChecked]}
-          onPress={() => setIsChecked((prev) => ({ ...prev, [selectedMethod]: !prev[selectedMethod] }))}
+          style={[styles.checkbox, isChecked && styles.checkboxChecked]}
+          onPress={() => setIsChecked(!isChecked)}
         >
-          {isChecked[selectedMethod] && <Ionicons name="checkmark" size={16} color="#FFF" />}
+          {isChecked && <Ionicons name="checkmark" size={16} color="#FFF" />}
         </TouchableOpacity>
         <Text style={styles.checkboxLabel}>Save my details</Text>
       </View>
@@ -112,14 +186,6 @@ const PaymentScreen = ({ navigation }) => {
               keyboardType="email-address"
               value={cardDetails.email}
               onChangeText={(text) => handleFormChange('email', text)}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Phone Number (Optional)"
-              placeholderTextColor="#999"
-              keyboardType="numeric"
-              value={cardDetails.phoneNumber}
-              onChangeText={(text) => handleFormChange('phoneNumber', text)}
             />
             {renderSaveDetailsCheckbox()}
           </View>
@@ -198,19 +264,27 @@ const PaymentScreen = ({ navigation }) => {
         {/* Payment Form */}
         {renderForm()}
 
-        {/* Continue Button */}
-        <TouchableOpacity
-          style={styles.continueButton}
-          onPress={() => alert('Payment details submitted!')}
-        >
-          <Text style={styles.continueButtonText}>Continue</Text>
+        {/* Add Payment Button */}
+        <TouchableOpacity style={styles.continueButton} onPress={handleAddPayment}>
+          <Text style={styles.continueButtonText}>Add Payment</Text>
         </TouchableOpacity>
+
+        {/* Horizontal Scrollable Banners */}
+        <FlatList
+          data={paymentBanners}
+          horizontal
+          keyExtractor={(item) => item.id}
+          renderItem={renderBanner}
+          style={styles.bannerList}
+          showsHorizontalScrollIndicator={false}
+        />
       </ScrollView>
     </SafeAreaView>
   );
 };
 
 export default PaymentScreen;
+
 
 
 
@@ -355,5 +429,56 @@ const styles = StyleSheet.create({
     color: '#999',
     textAlign: 'center',
     marginVertical: 20,
+  },
+  banner: {
+    backgroundColor: '#F9F9F9',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  bannerTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 10,
+  },
+  bannerText: {
+    fontSize: 14,
+    color: '#666',
+  },
+  bannerLabel: {
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  banner: {
+    backgroundColor: '#F5F5F5',
+    padding: 15,
+    borderRadius: 10,
+    marginHorizontal: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+    width: 250,
+  },
+  bannerTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 10,
+  },
+  bannerText: {
+    fontSize: 14,
+    color: '#666',
+  },
+  bannerLabel: {
+    fontWeight: 'bold',
+    color: '#333',
   },
 });

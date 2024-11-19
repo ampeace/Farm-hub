@@ -11,31 +11,31 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const payments = [
-  { id: '1', date: '8 May', amount: '$950' },
-  { id: '2', date: '16 May', amount: '$1,000' },
-  { id: '3', date: '30 May', amount: '$675' },
+const customerPayments = [
+  { id: '1', date: '10 Nov', amount: '$150' },
+  { id: '2', date: '15 Nov', amount: '$200' },
+  { id: '3', date: '20 Nov', amount: '$250' },
 ];
 
-const horizontalCards = [
-  { id: '1', title: 'Contract', description: 'Details for Card 1' },
-  { id: '2', title: 'Escrow', description: 'Details for Card 2' },
-  { id: '3', title: 'Help', description: 'Details for Card 3' },
+const customerFeatures = [
+  { id: '1', title: 'Order History', description: 'View your past orders and purchases.' },
+  { id: '2', title: 'Refund Status', description: 'Check the status of your refunds.' },
+  { id: '3', title: 'Customer Support', description: 'Get help with your orders.' },
 ];
 
-const budgetData = [
-  { id: 'budget', label: 'Budget', value: '$3,500' },
-  { id: 'escrow', label: 'In escrow', value: '$2,000' },
-  { id: 'milestonesPaid', label: 'Milestones paid', value: '$875' },
-  { id: 'remaining', label: 'Remaining', value: '$2,625' },
+const purchaseDetails = [
+  { id: 'totalSpent', label: 'Total Spent', value: '$1,200' },
+  { id: 'refunds', label: 'Refunds', value: '$150' },
+  { id: 'activeOrders', label: 'Active Orders', value: '3' },
+  { id: 'completedOrders', label: 'Completed Orders', value: '12' },
 ];
 
-const ServiceScreen = ({ navigation }) => {
-  const [selectedCard, setSelectedCard] = useState(null); // Tracks the selected card for the modal
+const CustomerEscrowScreen = ({ navigation }) => {
+  const [selectedFeature, setSelectedFeature] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
   const scaleAnimation = useRef(new Animated.Value(1)).current;
 
-  const handleCardPress = (card) => {
+  const handleFeaturePress = (feature) => {
     Animated.sequence([
       Animated.timing(scaleAnimation, {
         toValue: 1.1,
@@ -51,22 +51,22 @@ const ServiceScreen = ({ navigation }) => {
       }),
     ]).start();
 
-    setSelectedCard(card);
+    setSelectedFeature(feature);
     setModalVisible(true);
   };
 
-  const renderHorizontalCard = ({ item }) => (
-    <TouchableOpacity activeOpacity={0.8} onPress={() => handleCardPress(item)}>
+  const renderFeatureCard = ({ item }) => (
+    <TouchableOpacity activeOpacity={0.8} onPress={() => handleFeaturePress(item)}>
       <Animated.View
         style={[
-          styles.horizontalCard,
-          selectedCard?.id === item.id && {
+          styles.featureCard,
+          selectedFeature?.id === item.id && {
             transform: [{ scale: scaleAnimation }],
             backgroundColor: '#CCE4FF',
           },
         ]}
       >
-        <Text style={styles.horizontalCardTitle}>{item.title}</Text>
+        <Text style={styles.featureCardTitle}>{item.title}</Text>
       </Animated.View>
     </TouchableOpacity>
   );
@@ -75,18 +75,18 @@ const ServiceScreen = ({ navigation }) => {
     <View style={styles.container}>
       {/* Header Section */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate('FarmerHome')}>
+        <TouchableOpacity onPress={() => navigation.navigate('CustomerHome')}>
           <Ionicons name="arrow-back-outline" size={24} color="#333" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Escrow</Text>
         <TouchableOpacity>
-          <Ionicons name="expand" size={24} color="#333" />
+          <Ionicons name="help-circle-outline" size={24} color="#333" />
         </TouchableOpacity>
       </View>
 
       {/* Payments Section */}
       <FlatList
-        data={payments}
+        data={customerPayments}
         horizontal
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
@@ -102,42 +102,42 @@ const ServiceScreen = ({ navigation }) => {
         ListEmptyComponent={<Text style={styles.emptyText}>No payments available</Text>}
       />
 
-      {/* Horizontal Cards Section */}
+      {/* Features Section */}
       <FlatList
-        data={horizontalCards}
+        data={customerFeatures}
         horizontal
         keyExtractor={(item) => item.id}
-        renderItem={renderHorizontalCard}
+        renderItem={renderFeatureCard}
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.horizontalCardContainer}
+        contentContainerStyle={styles.featureContainer}
       />
 
-      {/* Budget Breakdown */}
-      <View style={styles.breakdownContainer}>
-        <Text style={styles.breakdownText}>Budget breakdown</Text>
+      {/* Purchase Details */}
+      <View style={styles.purchaseDetailsContainer}>
+        <Text style={styles.purchaseDetailsText}>Purchase Details</Text>
         <FlatList
-          data={budgetData}
+          data={purchaseDetails}
           numColumns={2}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <TouchableOpacity activeOpacity={0.8}>
-              <Animated.View style={styles.rectangularBox}>
-                <Text style={styles.rectangularValue}>{item.value}</Text>
+              <Animated.View style={styles.purchaseBox}>
+                <Text style={styles.purchaseValue}>{item.value}</Text>
               </Animated.View>
-              <Text style={styles.breakdownLabel}>{item.label}</Text>
+              <Text style={styles.purchaseLabel}>{item.label}</Text>
             </TouchableOpacity>
           )}
-          columnWrapperStyle={styles.breakdownRow}
+          columnWrapperStyle={styles.purchaseRow}
         />
-        <Text style={styles.totalPayments}>Total payments: $875</Text>
+        <Text style={styles.totalSpent}>Total Spent: $1,200</Text>
       </View>
 
-      {/* Milestone Details Button */}
-      <TouchableOpacity style={styles.detailsButton}>
-        <Text style={styles.detailsButtonText}>Milestone details</Text>
+      {/* Support Button */}
+      <TouchableOpacity style={styles.supportButton}>
+        <Text style={styles.supportButtonText}>Contact Support</Text>
       </TouchableOpacity>
 
-      {/* Modal for Selected Card */}
+      {/* Modal for Selected Feature */}
       <Modal
         animationType="slide"
         visible={isModalVisible}
@@ -145,8 +145,8 @@ const ServiceScreen = ({ navigation }) => {
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>{selectedCard?.title}</Text>
-          <Text style={styles.modalDescription}>{selectedCard?.description}</Text>
+          <Text style={styles.modalTitle}>{selectedFeature?.title}</Text>
+          <Text style={styles.modalDescription}>{selectedFeature?.description}</Text>
           <TouchableOpacity
             style={styles.closeButton}
             onPress={() => setModalVisible(false)}
@@ -159,7 +159,7 @@ const ServiceScreen = ({ navigation }) => {
   );
 };
 
-export default ServiceScreen;
+export default CustomerEscrowScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -202,10 +202,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  horizontalCardContainer: {
+  featureContainer: {
     marginVertical: 20,
   },
-  horizontalCard: {
+  featureCard: {
     backgroundColor: '#E8F1FF',
     padding: 20,
     borderRadius: 10,
@@ -218,28 +218,28 @@ const styles = StyleSheet.create({
     elevation: 5,
     marginRight: 10,
   },
-  horizontalCardTitle: {
+  featureCardTitle: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#1E125F',
   },
-  breakdownContainer: {
+  purchaseDetailsContainer: {
     backgroundColor: '#fff',
     borderRadius: 10,
     padding: 20,
     marginVertical: 20,
   },
-  breakdownText: {
+  purchaseDetailsText: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#1E125F',
     marginBottom: 10,
   },
-  breakdownRow: {
+  purchaseRow: {
     justifyContent: 'space-between',
     marginBottom: 10,
   },
-  rectangularBox: {
+  purchaseBox: {
     backgroundColor: '#E8F1FF',
     paddingVertical: 15,
     paddingHorizontal: 20,
@@ -250,10 +250,22 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 5,
   },
-  rectangularValue: { fontSize: 16, fontWeight: 'bold', color: '#1E125F' },
-  breakdownLabel: { textAlign: 'center', color: '#7A7A7A', fontSize: 14 },
-  totalPayments: { textAlign: 'center', color: '#7A7A7A', marginTop: 10 },
-  detailsButton: {
+  purchaseValue: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#1E125F',
+  },
+  purchaseLabel: {
+    textAlign: 'center',
+    color: '#7A7A7A',
+    fontSize: 14,
+  },
+  totalSpent: {
+    textAlign: 'center',
+    color: '#7A7A7A',
+    marginTop: 10,
+  },
+  supportButton: {
     backgroundColor: '#6FBF73',
     padding: 15,
     borderRadius: 10,
@@ -264,7 +276,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 5,
   },
-  detailsButtonText: {
+  supportButtonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',

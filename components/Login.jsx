@@ -16,7 +16,6 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  // Function to handle login
   const handleLogin = () => {
     Keyboard.dismiss(); // Dismiss the keyboard
     if (!phoneNumber || !password) {
@@ -24,21 +23,19 @@ const LoginScreen = ({ navigation }) => {
       return;
     }
 
-    if (phoneNumber === '1' && password === 'p') {
-      navigation.replace('Home'); // Navigate to Home Screen on successful login
+    // Simulating role-based login
+    if (phoneNumber === '1' && password === 'farmer') {
+      navigation.replace('FarmerHome'); // Navigate to Farmer section
+    } else if (phoneNumber === '2' && password === 'customer') {
+      navigation.replace('CustomerHome'); // Navigate to Customer section
     } else {
       Alert.alert('Error', 'Invalid phone number or password.');
     }
   };
 
-  // Function to handle phone number input
   const handlePhoneNumberChange = (text) => {
-    if (text.length <= 1) {
+    if (text.length <= 10) {
       setPhoneNumber(text);
-    }
-    // Automatically dismiss the keyboard and shift focus to the password field
-    if (text.length === 10) {
-      Keyboard.dismiss(); // Dismiss the keyboard
     }
   };
 
@@ -62,7 +59,7 @@ const LoginScreen = ({ navigation }) => {
               keyboardType="phone-pad"
               value={phoneNumber}
               onChangeText={handlePhoneNumberChange}
-              maxLength={10} // Limit input to 10 digits
+              maxLength={10}
               returnKeyType="done"
             />
           </View>
@@ -92,7 +89,10 @@ const LoginScreen = ({ navigation }) => {
         </View>
 
         {/* Forgot Password */}
-        <TouchableOpacity style={styles.forgotPassword} onPress={() => navigation.navigate('ForgotPassword')}>
+        <TouchableOpacity
+          style={styles.forgotPassword}
+          onPress={() => navigation.navigate('ForgotPassword')}
+        >
           <Text style={styles.forgotPasswordText}>Forgot password?</Text>
         </TouchableOpacity>
 
@@ -116,7 +116,7 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF', // White background
+    backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F5F5F5', // Light gray input background
+    backgroundColor: '#F5F5F5',
     borderRadius: 10,
     paddingHorizontal: 10,
     marginBottom: 15,
@@ -154,11 +154,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   forgotPasswordText: {
-    color: '#6C757D', // Gray text
+    color: '#6C757D',
     fontSize: 14,
   },
   loginButton: {
-    backgroundColor: '#6FBF73', // Green color
+    backgroundColor: '#6FBF73',
     width: '100%',
     height: 50,
     justifyContent: 'center',
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   signupLink: {
-    color: '#6FBF73', // Green link color
+    color: '#6FBF73',
     fontSize: 14,
     fontWeight: 'bold',
   },

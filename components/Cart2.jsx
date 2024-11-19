@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, SafeAreaView, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const CarScreen = ({ navigation }) => {
+const CarScreen2 = ({ navigation }) => {
   const [activeTab, setActiveTab] = useState('Upcoming');
 
   const upcomingOrders = [
-    { id: '1', customer: 'John Doe', address: '123 Main St', deliveryDate: 'Nov 22, 2024' },
+    { id: '1', customer: 'Kaushik', address: '123 Main St', deliveryDate: 'Nov 22, 2024' },
     { id: '2', customer: 'Jane Smith', address: '456 Elm St', deliveryDate: 'Nov 23, 2024' },
   ];
 
   const deliveredOrders = [
-    { id: '3', customer: 'Mark Wilson', address: '789 Pine St', deliveryDate: 'Nov 20, 2024' },
+    { id: '3', customer: 'Iqbal', address: '789 Pine St', deliveryDate: 'Nov 20, 2024' },
     { id: '4', customer: 'Lucy Brown', address: '321 Oak St', deliveryDate: 'Nov 19, 2024' },
   ];
 
@@ -37,7 +37,7 @@ const CarScreen = ({ navigation }) => {
       <View style={styles.container}>
         {/* Header with back arrow */}
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.navigate('FarmerHome')}>
+          <TouchableOpacity onPress={() => navigation.navigate('CustomerHome')}>
             <Ionicons name="arrow-back-outline" size={24} color="#333" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Orders</Text>
@@ -58,7 +58,7 @@ const CarScreen = ({ navigation }) => {
             onPress={() => setActiveTab('Delivered')}
           >
             <Text style={[styles.tabText, activeTab === 'Delivered' && styles.activeTabText]}>
-              Delivered Orders
+              Received Orders
             </Text>
           </TouchableOpacity>
         </View>
@@ -84,7 +84,7 @@ const CarScreen = ({ navigation }) => {
   );
 };
 
-export default CarScreen;
+export default CarScreen2;
 
 const styles = StyleSheet.create({
   safeArea: {

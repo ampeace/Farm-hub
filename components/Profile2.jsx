@@ -74,7 +74,7 @@ const ProfileScreen = ({ navigation }) => {
       <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.navigate('FarmerHome')}>
+          <TouchableOpacity onPress={() => navigation.navigate('CustomerHome')}>
             <Ionicons name="arrow-back-outline" size={24} color="#333" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>My Profile</Text>

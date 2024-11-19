@@ -25,13 +25,13 @@ const HomeScreen = ({ navigation }) => {
     },
     {
       id: '2',
-      title: 'New Discounts',
+      title: 'New Discounts Available!',
       buttonText: 'Shop Now',
       image: require('../Asset/sale-tag.png'),
     },
     {
       id: '3',
-      title: 'MSP Trend',
+      title: 'Market ',
       buttonText: 'Check Market',
       image: require('../Asset/financial-profit.png'),
     },

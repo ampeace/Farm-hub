@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Animated,
   FlatList,
+  Modal,
   Easing,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,6 +17,12 @@ const payments = [
   { id: '3', date: '30 May', amount: '$675' },
 ];
 
+const horizontalCards = [
+  { id: '1', title: 'Contract', description: 'Details for Card 1' },
+  { id: '2', title: 'Escrow', description: 'Details for Card 2' },
+  { id: '3', title: 'Help', description: 'Details for Card 3' },
+];
+
 const budgetData = [
   { id: 'budget', label: 'Budget', value: '$3,500' },
   { id: 'escrow', label: 'In escrow', value: '$2,000' },
@@ -24,10 +31,11 @@ const budgetData = [
 ];
 
 const ServiceScreen = () => {
-  const [selectedBox, setSelectedBox] = useState(null); // Tracks the clicked box
+  const [selectedCard, setSelectedCard] = useState(null); // Tracks the selected card for the modal
+  const [isModalVisible, setModalVisible] = useState(false);
   const scaleAnimation = useRef(new Animated.Value(1)).current;
 
-  const handleBoxPress = (boxName) => {
+  const handleCardPress = (card) => {
     // Start animation
     Animated.sequence([
       Animated.timing(scaleAnimation, {
@@ -44,40 +52,24 @@ const ServiceScreen = () => {
       }),
     ]).start();
 
-    setSelectedBox(boxName); // Highlight the clicked box
+    // Set the selected card and open modal
+    setSelectedCard(card);
+    setModalVisible(true);
   };
 
-  const renderPayment = ({ item }) => (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      onPress={() => handleBoxPress(item.id)}
-    >
+  const renderHorizontalCard = ({ item }) => (
+    <TouchableOpacity activeOpacity={0.8} onPress={() => handleCardPress(item)}>
       <Animated.View
         style={[
-          styles.paymentBox,
-          selectedBox === item.id ? styles.paymentBoxSelected : null,
+          styles.horizontalCard,
+          selectedCard?.id === item.id && {
+            transform: [{ scale: scaleAnimation }],
+            backgroundColor: '#CCE4FF',
+          },
         ]}
       >
-        <Text style={styles.paymentDate}>{item.date}</Text>
-        <Text style={styles.paymentAmount}>{item.amount}</Text>
+        <Text style={styles.horizontalCardTitle}>{item.title}</Text>
       </Animated.View>
-    </TouchableOpacity>
-  );
-
-  const renderBudgetBox = ({ item }) => (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      onPress={() => handleBoxPress(item.id)}
-    >
-      <Animated.View
-        style={[
-          styles.rectangularBox,
-          selectedBox === item.id && { transform: [{ scale: scaleAnimation }], backgroundColor: '#CCE4FF' },
-        ]}
-      >
-        <Text style={styles.rectangularValue}>{item.value}</Text>
-      </Animated.View>
-      <Text style={styles.breakdownLabel}>{item.label}</Text>
     </TouchableOpacity>
   );
 
@@ -96,10 +88,27 @@ const ServiceScreen = () => {
         data={payments}
         horizontal
         keyExtractor={(item) => item.id}
-        renderItem={renderPayment}
+        renderItem={({ item }) => (
+          <TouchableOpacity activeOpacity={0.8}>
+            <Animated.View style={styles.paymentBox}>
+              <Text style={styles.paymentDate}>{item.date}</Text>
+              <Text style={styles.paymentAmount}>{item.amount}</Text>
+            </Animated.View>
+          </TouchableOpacity>
+        )}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.paymentContainer}
         ListEmptyComponent={<Text style={styles.emptyText}>No payments available</Text>}
+      />
+
+      {/* Horizontal Cards Section */}
+      <FlatList
+        data={horizontalCards}
+        horizontal
+        keyExtractor={(item) => item.id}
+        renderItem={renderHorizontalCard}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.horizontalCardContainer}
       />
 
       {/* Budget Breakdown */}
@@ -109,7 +118,14 @@ const ServiceScreen = () => {
           data={budgetData}
           numColumns={2}
           keyExtractor={(item) => item.id}
-          renderItem={renderBudgetBox}
+          renderItem={({ item }) => (
+            <TouchableOpacity activeOpacity={0.8}>
+              <Animated.View style={styles.rectangularBox}>
+                <Text style={styles.rectangularValue}>{item.value}</Text>
+              </Animated.View>
+              <Text style={styles.breakdownLabel}>{item.label}</Text>
+            </TouchableOpacity>
+          )}
           columnWrapperStyle={styles.breakdownRow}
         />
         <Text style={styles.totalPayments}>Total payments: $875</Text>
@@ -119,6 +135,25 @@ const ServiceScreen = () => {
       <TouchableOpacity style={styles.detailsButton}>
         <Text style={styles.detailsButtonText}>Milestone details</Text>
       </TouchableOpacity>
+
+      {/* Modal for Selected Card */}
+      <Modal
+        animationType="slide"
+        visible={isModalVisible}
+        transparent={false}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalTitle}>{selectedCard?.title}</Text>
+          <Text style={styles.modalDescription}>{selectedCard?.description}</Text>
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => setModalVisible(false)}
+          >
+            <Text style={styles.closeButtonText}>Close</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -157,9 +192,6 @@ const styles = StyleSheet.create({
     elevation: 6,
     marginRight: 10,
   },
-  paymentBoxSelected: {
-    backgroundColor: '#D9D9D9',
-  },
   paymentDate: {
     color: '#fff',
     fontSize: 14,
@@ -168,6 +200,27 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  horizontalCardContainer: {
+    marginVertical: 20,
+  },
+  horizontalCard: {
+    backgroundColor: '#E8F1FF',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 10, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+    marginRight: 10,
+  },
+  horizontalCardTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#1E125F',
   },
   breakdownContainer: {
     backgroundColor: '#fff',
@@ -215,10 +268,30 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  emptyText: {
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#1E125F',
+  },
+  modalDescription: {
+    fontSize: 16,
+    color: '#666',
+    marginVertical: 20,
+  },
+  closeButton: {
+    backgroundColor: '#6FBF73',
+    padding: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  closeButtonText: {
     color: '#fff',
-    fontSize: 14,
-    textAlign: 'center',
-    marginTop: 10,
+    fontWeight: 'bold',
   },
 });

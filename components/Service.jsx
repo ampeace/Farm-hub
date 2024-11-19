@@ -30,13 +30,12 @@ const budgetData = [
   { id: 'remaining', label: 'Remaining', value: '$2,625' },
 ];
 
-const ServiceScreen = () => {
+const ServiceScreen = ({ navigation }) => {
   const [selectedCard, setSelectedCard] = useState(null); // Tracks the selected card for the modal
   const [isModalVisible, setModalVisible] = useState(false);
   const scaleAnimation = useRef(new Animated.Value(1)).current;
 
   const handleCardPress = (card) => {
-    // Start animation
     Animated.sequence([
       Animated.timing(scaleAnimation, {
         toValue: 1.1,
@@ -52,7 +51,6 @@ const ServiceScreen = () => {
       }),
     ]).start();
 
-    // Set the selected card and open modal
     setSelectedCard(card);
     setModalVisible(true);
   };
@@ -77,9 +75,12 @@ const ServiceScreen = () => {
     <View style={styles.container}>
       {/* Header Section */}
       <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+          <Ionicons name="arrow-back-outline" size={24} color="#333" />
+        </TouchableOpacity>
         <Text style={styles.headerTitle}>Escrow</Text>
         <TouchableOpacity>
-          <Ionicons name="expand" size={24} color="#fff" />
+          <Ionicons name="expand" size={24} color="#333" />
         </TouchableOpacity>
       </View>
 

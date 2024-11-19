@@ -25,15 +25,15 @@ const HomeScreen = ({ navigation }) => {
     },
     {
       id: '2',
-      title: 'New Discounts Available!',
+      title: 'New Discounts',
       buttonText: 'Shop Now',
-      image: require('../Asset/botanist.png'),
+      image: require('../Asset/sale-tag.png'),
     },
     {
       id: '3',
-      title: 'Expert Advice',
-      buttonText: 'Learn More',
-      image: require('../Asset/botanist.png'),
+      title: 'MSP Trend',
+      buttonText: 'Check Market',
+      image: require('../Asset/financial-profit.png'),
     },
   ];
 

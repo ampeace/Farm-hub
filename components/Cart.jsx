@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, SafeAreaView , Image} from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, SafeAreaView, Image } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
-const CarScreen = () => {
-  const [activeTab, setActiveTab] = useState('Upcoming'); // State to track active tab
+const CarScreen = ({ navigation }) => {
+  const [activeTab, setActiveTab] = useState('Upcoming');
 
   const upcomingOrders = [
     { id: '1', customer: 'John Doe', address: '123 Main St', deliveryDate: 'Nov 22, 2024' },
@@ -30,11 +31,18 @@ const CarScreen = () => {
       </View>
     </TouchableOpacity>
   );
-  
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
+        {/* Header with back arrow */}
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Ionicons name="arrow-back-outline" size={24} color="#333" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Orders</Text>
+        </View>
+
         {/* Oval Tabs for Upcoming and Delivered */}
         <View style={styles.tabContainer}>
           <TouchableOpacity
@@ -88,6 +96,17 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#F5F5F5',
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    marginLeft: 10,
+  },
   tabContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -132,33 +151,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-  },
-  customerName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 5,
-  },
-  orderDetails: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 5,
-  },
-  deliveryDate: {
-    fontSize: 14,
-    color: '#333',
-    fontStyle: 'italic',
-  },
-  orderCard: {
-    backgroundColor: '#FFFFFF',
-    padding: 20,
-    borderRadius: 15,
-    marginBottom: 15,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
     borderWidth: 1,
     borderColor: '#E0E0E0',
   },
@@ -181,7 +173,7 @@ const styles = StyleSheet.create({
   orderDetails: {
     fontSize: 14,
     color: '#666',
-    flex: 1, // Ensures long addresses wrap correctly
+    flex: 1,
   },
   deliveryDate: {
     fontSize: 14,
@@ -189,4 +181,3 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
 });
-

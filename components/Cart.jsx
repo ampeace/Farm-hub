@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, SafeAreaView , Image} from 'react-native';
 
 const CarScreen = () => {
   const [activeTab, setActiveTab] = useState('Upcoming'); // State to track active tab
@@ -15,12 +15,22 @@ const CarScreen = () => {
   ];
 
   const renderOrder = ({ item }) => (
-    <View style={styles.orderCard}>
-      <Text style={styles.customerName}>{item.customer}</Text>
-      <Text style={styles.orderDetails}>{item.address}</Text>
-      <Text style={styles.deliveryDate}>Delivery Date: {item.deliveryDate}</Text>
-    </View>
+    <TouchableOpacity style={styles.orderCard} onPress={() => alert(`Viewing details for ${item.customer}`)}>
+      <View style={styles.orderRow}>
+        <Image source={require('../Asset/customer-service.png')} style={styles.orderIcon} />
+        <Text style={styles.customerName}>{item.customer}</Text>
+      </View>
+      <View style={styles.orderRow}>
+        <Image source={require('../Asset/location.png')} style={styles.orderIcon} />
+        <Text style={styles.orderDetails}>{item.address}</Text>
+      </View>
+      <View style={styles.orderRow}>
+        <Image source={require('../Asset/google-calendar.png')} style={styles.orderIcon} />
+        <Text style={styles.deliveryDate}>Delivery Date: {item.deliveryDate}</Text>
+      </View>
+    </TouchableOpacity>
   );
+  
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -139,4 +149,44 @@ const styles = StyleSheet.create({
     color: '#333',
     fontStyle: 'italic',
   },
+  orderCard: {
+    backgroundColor: '#FFFFFF',
+    padding: 20,
+    borderRadius: 15,
+    marginBottom: 15,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+  },
+  orderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  orderIcon: {
+    width: 20,
+    height: 20,
+    marginRight: 10,
+    tintColor: '#6FBF73',
+  },
+  customerName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  orderDetails: {
+    fontSize: 14,
+    color: '#666',
+    flex: 1, // Ensures long addresses wrap correctly
+  },
+  deliveryDate: {
+    fontSize: 14,
+    color: '#333',
+    fontStyle: 'italic',
+  },
 });
+

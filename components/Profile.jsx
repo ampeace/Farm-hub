@@ -18,14 +18,14 @@ const ProfileScreen = ({ navigation }) => {
       icon: 'wallet-outline', // Ionicons icon
       notification: '2 New',
       notificationStyle: styles.notificationBlue,
-      onPress: () => navigation.navigate('Payments'), // Navigate to Payments
+      onPress: () => navigation.navigate('Payments'), // Navigate to Payments Screen
     },
     {
       id: '2',
       label: 'Achievements',
       icon: 'trophy-outline',
       notification: null,
-      onPress: () => alert('Achievements clicked!'),
+      onPress: () => navigation.navigate('Achievements'), // Navigate to Achievements Screen
     },
     {
       id: '3',
@@ -33,7 +33,7 @@ const ProfileScreen = ({ navigation }) => {
       icon: 'lock-closed-outline',
       notification: 'Actions Needed',
       notificationStyle: styles.notificationRed,
-      onPress: () => alert('Privacy clicked!'),
+      onPress: () => navigation.navigate('Privacy'), // Navigate to Privacy Screen
     },
   ];
 
@@ -126,6 +126,7 @@ const ProfileScreen = ({ navigation }) => {
 };
 
 export default ProfileScreen;
+
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,

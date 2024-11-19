@@ -10,7 +10,9 @@ import HomeScreen from './components/Home'; // Home Screen
 import ProfileScreen from './components/Profile'; // Profile Screen
 import CartScreen from './components/Cart'; // Cart Screen
 import ServiceScreen from './components/Service'; // Service Screen
-import PaymentsScreen from './components/Payment'; // Payments Screen (NEW)
+import PaymentsScreen from './components/Payment'; // Payments Screen
+import AchievementsScreen from './components/Achive'; // Achievements Screen (NEW)
+import PrivacyScreen from './components/Privacy'; // Privacy Screen (NEW)
 
 const Stack = createNativeStackNavigator();
 
@@ -27,11 +29,27 @@ const App = () => {
         <Stack.Screen name="Cart" component={CartScreen} />
         <Stack.Screen name="Service" component={ServiceScreen} />
         <Stack.Screen
-          name="Payments" // NEW Payment Screen
+          name="Payments"
           component={PaymentsScreen}
           options={{
-            headerShown: true, // Show the header for Payments Screen
-            title: 'Payments', // Title for the Payments screen header
+            headerShown: true,
+            title: 'Payments',
+          }}
+        />
+        <Stack.Screen
+          name="Achievements" // NEW Achievement Screen
+          component={AchievementsScreen}
+          options={{
+            headerShown: true,
+            title: 'Achievements',
+          }}
+        />
+        <Stack.Screen
+          name="Privacy" // NEW Privacy Screen
+          component={PrivacyScreen}
+          options={{
+            headerShown: true,
+            title: 'Privacy Settings',
           }}
         />
       </Stack.Navigator>

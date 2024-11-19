@@ -1,10 +1,31 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Animated, Easing } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // For icons
+import React, { useState, useRef } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Animated,
+  FlatList,
+  Easing,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+
+const payments = [
+  { id: '1', date: '8 May', amount: '$950' },
+  { id: '2', date: '16 May', amount: '$1,000' },
+  { id: '3', date: '30 May', amount: '$675' },
+];
+
+const budgetData = [
+  { id: 'budget', label: 'Budget', value: '$3,500' },
+  { id: 'escrow', label: 'In escrow', value: '$2,000' },
+  { id: 'milestonesPaid', label: 'Milestones paid', value: '$875' },
+  { id: 'remaining', label: 'Remaining', value: '$2,625' },
+];
 
 const ServiceScreen = () => {
   const [selectedBox, setSelectedBox] = useState(null); // Tracks the clicked box
-  const scaleAnimation = new Animated.Value(1); // Animation state
+  const scaleAnimation = useRef(new Animated.Value(1)).current;
 
   const handleBoxPress = (boxName) => {
     // Start animation
@@ -26,87 +47,71 @@ const ServiceScreen = () => {
     setSelectedBox(boxName); // Highlight the clicked box
   };
 
+  const renderPayment = ({ item }) => (
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => handleBoxPress(item.id)}
+    >
+      <Animated.View
+        style={[
+          styles.paymentBox,
+          selectedBox === item.id ? styles.paymentBoxSelected : null,
+        ]}
+      >
+        <Text style={styles.paymentDate}>{item.date}</Text>
+        <Text style={styles.paymentAmount}>{item.amount}</Text>
+      </Animated.View>
+    </TouchableOpacity>
+  );
+
+  const renderBudgetBox = ({ item }) => (
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => handleBoxPress(item.id)}
+    >
+      <Animated.View
+        style={[
+          styles.rectangularBox,
+          selectedBox === item.id && { transform: [{ scale: scaleAnimation }], backgroundColor: '#CCE4FF' },
+        ]}
+      >
+        <Text style={styles.rectangularValue}>{item.value}</Text>
+      </Animated.View>
+      <Text style={styles.breakdownLabel}>{item.label}</Text>
+    </TouchableOpacity>
+  );
+
   return (
     <View style={styles.container}>
       {/* Header Section */}
       <View style={styles.header}>
-        <TouchableOpacity>
-          <Ionicons name="arrow-back" size={24} color="#fff" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Escrow </Text>
+        <Text style={styles.headerTitle}>Escrow</Text>
         <TouchableOpacity>
           <Ionicons name="expand" size={24} color="#fff" />
         </TouchableOpacity>
       </View>
-      {/* Next Payments Section */}
-      <View style={styles.paymentContainer}>
-        {[{ date: '8 May', amount: '$950' }, { date: '16 May', amount: '$1,000' }, { date: '30 May', amount: '$675' }].map((item, index) => (
-          <TouchableOpacity key={index} activeOpacity={0.8} onPress={() => handleBoxPress(`payment-${index}`)}>
-            <Animated.View style={[styles.paymentBox, selectedBox === `payment-${index}` ? styles.paymentBoxSelected : null]}>
-              <Text style={styles.paymentDate}>{item.date}</Text>
-              <Text style={styles.paymentAmount}>{item.amount}</Text>
-            </Animated.View>
-          </TouchableOpacity>
-        ))}
-      </View>
+
+      {/* Payments Section */}
+      <FlatList
+        data={payments}
+        horizontal
+        keyExtractor={(item) => item.id}
+        renderItem={renderPayment}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.paymentContainer}
+        ListEmptyComponent={<Text style={styles.emptyText}>No payments available</Text>}
+      />
 
       {/* Budget Breakdown */}
       <View style={styles.breakdownContainer}>
         <Text style={styles.breakdownText}>Budget breakdown</Text>
-        <View style={styles.breakdownRow}>
-          {/* Budget Box */}
-          <TouchableOpacity activeOpacity={0.8} onPress={() => handleBoxPress('budget')}>
-            <Animated.View
-              style={[
-                styles.rectangularBox,
-                selectedBox === 'budget' && { transform: [{ scale: scaleAnimation }], backgroundColor: '#CCE4FF' },
-              ]}
-            >
-              <Text style={styles.rectangularValue}>$3,500</Text>
-            </Animated.View>
-            <Text style={styles.breakdownLabel}>Budget</Text>
-          </TouchableOpacity>
-
-          {/* Escrow Box */}
-          <TouchableOpacity activeOpacity={0.8} onPress={() => handleBoxPress('escrow')}>
-            <Animated.View
-              style={[
-                styles.rectangularBox,
-                selectedBox === 'escrow' && { transform: [{ scale: scaleAnimation }], backgroundColor: '#CCE4FF' },
-              ]}
-            >
-              <Text style={styles.rectangularValue}>$2,000</Text>
-            </Animated.View>
-            <Text style={styles.breakdownLabel}>In escrow</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.breakdownRow}>
-          {/* Milestones Paid Box */}
-          <TouchableOpacity activeOpacity={0.8} onPress={() => handleBoxPress('milestonesPaid')}>
-            <Animated.View
-              style={[
-                styles.rectangularBox,
-                selectedBox === 'milestonesPaid' && { transform: [{ scale: scaleAnimation }], backgroundColor: '#CCE4FF' },
-              ]}
-            >
-              <Text style={styles.rectangularValue}>$875</Text>
-            </Animated.View>
-            <Text style={styles.breakdownLabel}>Milestones paid</Text>
-          </TouchableOpacity>
-
-          {/* Remaining Box */}
-          <TouchableOpacity activeOpacity={0.8} onPress={() => handleBoxPress('remaining')}>
-            <Animated.View
-              style={[
-                styles.rectangularBox,
-                selectedBox === 'remaining' && { transform: [{ scale: scaleAnimation }], backgroundColor: '#CCE4FF' },
-              ]}
-            >
-              <Text style={styles.rectangularValue}>$2,625</Text>
-            </Animated.View>
-            <Text style={styles.breakdownLabel}>Remaining</Text>
-          </TouchableOpacity>
-        </View>
+        <FlatList
+          data={budgetData}
+          numColumns={2}
+          keyExtractor={(item) => item.id}
+          renderItem={renderBudgetBox}
+          columnWrapperStyle={styles.breakdownRow}
+        />
         <Text style={styles.totalPayments}>Total payments: $875</Text>
       </View>
 
@@ -137,25 +142,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  subtitle: {
-    color: '#fff',
-    marginTop: 10,
-    fontSize: 16,
-  },
-  progressContainer: {
-    marginTop: 10,
-    alignSelf: 'flex-start',
-    backgroundColor: '#2F2171',
-    padding: 10,
-    borderRadius: 50,
-  },
-  progressText: {
-    color: '#fff',
-    fontSize: 14,
-  },
   paymentContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
     marginVertical: 20,
   },
   paymentBox: {
@@ -168,6 +155,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 6,
+    marginRight: 10,
   },
   paymentBoxSelected: {
     backgroundColor: '#D9D9D9',
@@ -191,31 +179,28 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#1E125F',
+    marginBottom: 10,
   },
   breakdownRow: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 10,
+    marginBottom: 10,
   },
-  breakdownColumn: {
+  rectangularBox: {
+    backgroundColor: '#E8F1FF',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 8,
     alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 5,
+    flex: 1,
+    marginHorizontal: 5,
   },
-  breakdownLabel: {
-    color: '#7A7A7A',
-    fontSize: 14,
-  },
-  breakdownValue: {
-    color: '#1E125F',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  totalPayments: {
-    color: '#7A7A7A',
-    textAlign: 'center',
-    marginTop: 10,
-  },
+  rectangularValue: { fontSize: 16, fontWeight: 'bold', color: '#1E125F' },
+  breakdownLabel: { textAlign: 'center', color: '#7A7A7A', fontSize: 14 },
+  totalPayments: { textAlign: 'center', color: '#7A7A7A', marginTop: 10 },
   detailsButton: {
-    backgroundColor: '#24D29F',
+    backgroundColor: '#6FBF73',
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
@@ -230,34 +215,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-
-
-  rectangularBox: {
-    backgroundColor: '#E8F1FF',
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 5,
-  },
-  rectangularValue: { fontSize: 16, fontWeight: 'bold', color: '#1E125F' },
-  breakdownLabel: { textAlign: 'center', color: '#7A7A7A', fontSize: 14 },
-  totalPayments: { textAlign: 'center', color: '#7A7A7A', marginTop: 10 },
-  detailsButton: { 
-    backgroundColor: '#6FBF73',
-    padding: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-    elevation: 5, 
-  },
-  detailsButtonText: { 
+  emptyText: {
     color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-   },
+    fontSize: 14,
+    textAlign: 'center',
+    marginTop: 10,
+  },
 });

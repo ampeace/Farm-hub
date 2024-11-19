@@ -1,22 +1,72 @@
-import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 
-const ProfileScreen = () => {
+const CarScreen = () => {
+  const [activeTab, setActiveTab] = useState('Upcoming'); // State to track active tab
+
+  const upcomingOrders = [
+    { id: '1', customer: 'John Doe', address: '123 Main St', deliveryDate: 'Nov 22, 2024' },
+    { id: '2', customer: 'Jane Smith', address: '456 Elm St', deliveryDate: 'Nov 23, 2024' },
+  ];
+
+  const deliveredOrders = [
+    { id: '3', customer: 'Mark Wilson', address: '789 Pine St', deliveryDate: 'Nov 20, 2024' },
+    { id: '4', customer: 'Lucy Brown', address: '321 Oak St', deliveryDate: 'Nov 19, 2024' },
+  ];
+
+  const renderOrder = ({ item }) => (
+    <View style={styles.orderCard}>
+      <Text style={styles.customerName}>{item.customer}</Text>
+      <Text style={styles.orderDetails}>{item.address}</Text>
+      <Text style={styles.deliveryDate}>Delivery Date: {item.deliveryDate}</Text>
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Image
-          source={require('../Asset/profile.png')} // Replace with an actual profile image
-          style={styles.profileImage}
-        />
-        <Text style={styles.profileName}>John Doe</Text>
-        <Text style={styles.profileInfo}>Email: john.doe@example.com</Text>
-        <Text style={styles.profileInfo}>Phone: +1 123 456 7890</Text>
-        <Text style={styles.profileInfo}>Location: California, USA</Text>
+        {/* Oval Tabs for Upcoming and Delivered */}
+        <View style={styles.tabContainer}>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === 'Upcoming' && styles.activeTab]}
+            onPress={() => setActiveTab('Upcoming')}
+          >
+            <Text style={[styles.tabText, activeTab === 'Upcoming' && styles.activeTabText]}>
+              Upcoming Orders
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === 'Delivered' && styles.activeTab]}
+            onPress={() => setActiveTab('Delivered')}
+          >
+            <Text style={[styles.tabText, activeTab === 'Delivered' && styles.activeTabText]}>
+              Delivered Orders
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Orders List */}
+        {activeTab === 'Upcoming' ? (
+          <FlatList
+            data={upcomingOrders}
+            keyExtractor={(item) => item.id}
+            renderItem={renderOrder}
+            contentContainerStyle={styles.listContent}
+          />
+        ) : (
+          <FlatList
+            data={deliveredOrders}
+            keyExtractor={(item) => item.id}
+            renderItem={renderOrder}
+            contentContainerStyle={styles.listContent}
+          />
+        )}
       </View>
     </SafeAreaView>
   );
 };
+
+export default CarScreen;
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -25,26 +75,68 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 20,
+    backgroundColor: '#F5F5F5',
   },
-  profileImage: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+  tabContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
     marginBottom: 20,
   },
-  profileName: {
-    fontSize: 22,
+  tab: {
+    flex: 1,
+    backgroundColor: '#E0E0E0',
+    paddingVertical: 12,
+    borderRadius: 25,
+    alignItems: 'center',
+    marginHorizontal: 10,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  activeTab: {
+    backgroundColor: '#6FBF73',
+  },
+  tabText: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+  },
+  activeTabText: {
+    color: '#FFF',
+    fontWeight: 'bold',
+  },
+  listContent: {
+    paddingBottom: 10,
+  },
+  orderCard: {
+    backgroundColor: '#FFFFFF',
+    padding: 20,
+    borderRadius: 15,
+    marginBottom: 15,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  customerName: {
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 10,
+    marginBottom: 5,
   },
-  profileInfo: {
-    fontSize: 16,
+  orderDetails: {
+    fontSize: 14,
     color: '#666',
     marginBottom: 5,
   },
+  deliveryDate: {
+    fontSize: 14,
+    color: '#333',
+    fontStyle: 'italic',
+  },
 });
-
-export default ProfileScreen;

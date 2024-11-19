@@ -38,13 +38,6 @@ const ServiceScreen = () => {
           <Ionicons name="expand" size={24} color="#fff" />
         </TouchableOpacity>
       </View>
-
-      {/* Sub-header */}
-      <Text style={styles.subtitle}>Stage: Milestone 2</Text>
-      <View style={styles.progressContainer}>
-        <Text style={styles.progressText}>25%</Text>
-      </View>
-
       {/* Next Payments Section */}
       <View style={styles.paymentContainer}>
         {[{ date: '8 May', amount: '$950' }, { date: '16 May', amount: '$1,000' }, { date: '30 May', amount: '$675' }].map((item, index) => (
@@ -140,7 +133,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   headerTitle: {
-    color: '#fff',
+    color: '#6FBF73',
     fontSize: 18,
     fontWeight: 'bold',
   },
@@ -166,7 +159,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   paymentBox: {
-    backgroundColor: '#2F2171',
+    backgroundColor: '#6FBF73',
     padding: 20,
     borderRadius: 8,
     alignItems: 'center',
@@ -252,7 +245,7 @@ const styles = StyleSheet.create({
   breakdownLabel: { textAlign: 'center', color: '#7A7A7A', fontSize: 14 },
   totalPayments: { textAlign: 'center', color: '#7A7A7A', marginTop: 10 },
   detailsButton: { 
-    backgroundColor: '#24D29F',
+    backgroundColor: '#6FBF73',
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',

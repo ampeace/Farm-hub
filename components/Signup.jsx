@@ -7,93 +7,127 @@ import {
   Image,
   StyleSheet,
   SafeAreaView,
+  Alert,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
 const SignUpScreen = ({ navigation }) => {
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [password, setPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
 
+  const handleSignup = () => {
+    Keyboard.dismiss();
+    if (!fullName || !email || !phoneNumber || !password) {
+      Alert.alert('Error', 'Please fill in all fields.');
+      return;
+    }
+
+    // Simulating successful signup
+    Alert.alert('Success', 'Account created successfully!');
+    navigation.navigate('Login');
+  };
+
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        {/* Illustration */}
-        <Image
-          source={require('../Asset/tea.png')} // Replace with your illustration
-          style={styles.illustration}
-          resizeMode="contain"
-        />
+    <View style={styles.container}>
+      {/* Illustration */}
+      <Image
+        source={require('../Asset/tea.png')} // Replace with your illustration
+        style={styles.illustration}
+        resizeMode="contain"
+      />
 
-        {/* Input Fields */}
-        <View style={styles.inputContainer}>
-          <View style={styles.inputWrapper}>
-            <Image
-              source={require('../Asset/user.png')} // User icon PNG
-              style={styles.icon}
-            />
-            <TextInput placeholder="Full Name" style={styles.input} />
-          </View>
-
-          <View style={styles.inputWrapper}>
-            <Image
-              source={require('../Asset/mail-icon.png')} // Email icon PNG
-              style={styles.icon}
-            />
-            <TextInput
-              placeholder="Email Address"
-              style={styles.input}
-              keyboardType="email-address"
-            />
-          </View>
-
-          <View style={styles.inputWrapper}>
-            <Image
-              source={require('../Asset/telephone.png')} // Phone icon PNG
-              style={styles.icon}
-            />
-            <TextInput
-              placeholder="Phone Number"
-              style={styles.input}
-              keyboardType="phone-pad"
-              maxLength={10}
-            />
-          </View>
-
-          <View style={styles.inputWrapper}>
-            <Image
-              source={require('../Asset/lock.png')} // Lock icon PNG
-              style={styles.icon}
-            />
-            <TextInput
-              placeholder="Password"
-              style={styles.input}
-              secureTextEntry={!passwordVisible}
-            />
-            <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
-              <Image
-                source={
-                  passwordVisible
-                    ? require('../Asset/eye.png') // Eye open PNG
-                    : require('../Asset/eye closed.png') // Eye closed PNG
-                }
-                style={styles.icon}
-              />
-            </TouchableOpacity>
-          </View>
+      {/* Input Fields */}
+      <View style={styles.inputContainer}>
+        <View style={styles.inputWrapper}>
+          <Image
+            source={require('../Asset/user.png')} // User icon PNG
+            style={styles.icon}
+          />
+          <TextInput 
+            placeholder="Full Name" 
+            style={styles.input} 
+            value={fullName}
+            onChangeText={setFullName}
+            returnKeyType="next"
+          />
         </View>
 
-        {/* Sign Up Button */}
-        <TouchableOpacity style={styles.signupButton}>
-          <Text style={styles.signupButtonText}>Sign Up</Text>
-        </TouchableOpacity>
+        <View style={styles.inputWrapper}>
+          <Image
+            source={require('../Asset/mail-icon.png')} // Email icon PNG
+            style={styles.icon}
+          />
+          <TextInput
+            placeholder="Email Address"
+            style={styles.input}
+            keyboardType="email-address"
+            value={email}
+            onChangeText={setEmail}
+            returnKeyType="next"
+            autoCapitalize="none"
+          />
+        </View>
 
-        {/* Login Navigation */}
-        <View style={styles.loginContainer}>
-          <Text style={styles.loginText}>Already have an account?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.loginLink}> Login</Text>
+        <View style={styles.inputWrapper}>
+          <Image
+            source={require('../Asset/telephone.png')} // Phone icon PNG
+            style={styles.icon}
+          />
+          <TextInput
+            placeholder="Phone Number"
+            style={styles.input}
+            keyboardType="phone-pad"
+            maxLength={10}
+            value={phoneNumber}
+            onChangeText={setPhoneNumber}
+            returnKeyType="next"
+          />
+        </View>
+
+        <View style={styles.inputWrapper}>
+          <Image
+            source={require('../Asset/lock.png')} // Lock icon PNG
+            style={styles.icon}
+          />
+          <TextInput
+            placeholder="Password"
+            style={styles.input}
+            secureTextEntry={!passwordVisible}
+            value={password}
+            onChangeText={setPassword}
+            returnKeyType="done"
+            onSubmitEditing={handleSignup}
+          />
+          <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
+            <Image
+              source={
+                passwordVisible
+                  ? require('../Asset/eye.png') // Eye open PNG
+                  : require('../Asset/eye closed.png') // Eye closed PNG
+              }
+              style={styles.icon}
+            />
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
+
+      {/* Sign Up Button */}
+      <TouchableOpacity style={styles.signupButton} onPress={handleSignup}>
+        <Text style={styles.signupButtonText}>Sign Up</Text>
+      </TouchableOpacity>
+
+      {/* Login Navigation */}
+      <View style={styles.loginContainer}>
+        <Text style={styles.loginText}>Already have an account?</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.loginLink}> Login</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 };
 
@@ -104,6 +138,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
